@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Display</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 10px;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section h2 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+    .event {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="section" id="seating">
+    <h2>NOW SEATING</h2>
+  </div>
+  <div class="section" id="secondCall">
+    <h2>SECOND CALL</h2>
+  </div>
+  <div class="section" id="firstCall">
+    <h2>FIRST CALL</h2>
+  </div>
+
+<script>
+const apiKey = "V2-aq0EX-uprat-5MbZb-SzVPB-HEq27-DOUGk-fXv7C-p0bXa";
+const appId = "2e2fb385-9b7b-4d4c-aa35-a941a6d5039a";
+const tableName = "Meet Info";
+
+async function fetchData() {
+  try {
+    const response = await fetch(`https://api.appsheet.com/api/v2/apps/${appId}/tables/${encodeURIComponent(tableName)}/Action`, {
+      method: 'POST',
+      headers: {
+        'ApplicationAccessKey': apiKey,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ Action: "Find", Properties: {}, Rows: [] })
+    });
+
+    const result = await response.json();
+    console.log("RAW DATA:", result);
+    updateDisplay(result.Rows);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+function updateDisplay(data) {
+  const seating = data.filter(item => item['Clerk Status'] === 'Seating' && item['Division'] !== 'B');
+  const secondCall = data.filter(item => item['Clerk Status'] === 'Second Call' && item['Division'] !== 'B');
+  const firstCall = data.filter(item => item['Clerk Status'] === 'First Call' && item['Division'] !== 'B');
+
+  function formatItem(item) {
+    return `<div class="event">EVT ${item['Evt #']} ${item['Gender']} ${item['Age Group']} ${item['Distance']} ${item['Stroke']} DIV ${item['Division']}</div>`;
+  }
+
+  document.getElementById('seating').innerHTML += seating.map(formatItem).join('') || "<div class='event'>No Events</div>";
+  document.getElementById('secondCall').innerHTML += secondCall.map(formatItem).join('') || "<div class='event'>No Events</div>";
+  document.getElementById('firstCall').innerHTML += firstCall.map(formatItem).join('') || "<div class='event'>No Events</div>";
+}
+
+fetchData();
+setInterval(fetchData, 10000); // Refresh every 10 seconds
+</script>
+
+</body>
+</html>
