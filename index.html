@@ -59,9 +59,9 @@
             const secondCall = data.filter(item => item['Clerk Status'] === 'Second Call');
             const firstCall = data.filter(item => item['Clerk Status'] === 'First Call');
 
-            document.getElementById('seating').innerHTML = seating.map(item => `${item['Evt #']} - ${item['Gender']} ${item['Age Group']} ${item['Distance']} ${item['Stroke']}`).join('<br>');
-            document.getElementById('secondCall').innerHTML = secondCall.map(item => `${item['Evt #']} - ${item['Gender']} ${item['Age Group']} ${item['Distance']} ${item['Stroke']}`).join('<br>');
-            document.getElementById('firstCall').innerHTML = firstCall.map(item => `${item['Evt #']} - ${item['Gender']} ${item['Age Group']} ${item['Distance']} ${item['Stroke']}`).join('<br>');
+            document.getElementById('Seating').innerHTML = seating.map(item => `${item['Evt #']} - ${item['Gender']} ${item['Age Group']} ${item['Distance']} ${item['Stroke']}`).join('<br>');
+            document.getElementById('Second Call').innerHTML = secondCall.map(item => `${item['Evt #']} - ${item['Gender']} ${item['Age Group']} ${item['Distance']} ${item['Stroke']}`).join('<br>');
+            document.getElementById('First Call').innerHTML = firstCall.map(item => `${item['Evt #']} - ${item['Gender']} ${item['Age Group']} ${item['Distance']} ${item['Stroke']}`).join('<br>');
         }
     </script>
 </body>
